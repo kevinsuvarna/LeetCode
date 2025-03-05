@@ -4,16 +4,19 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[int]
         """
-        prod, zero_cnt = 1, 0
-        for num in nums:
-            if num:
-                prod *= num
-            else:
-                zero_cnt +=  1
-        if zero_cnt > 1: return [0] * len(nums)
+        n = len(nums)
+        res = [1] * n
+        pref = [1] * n
+        suff = [1] * n
 
-        res = [0] * len(nums)
-        for i, c in enumerate(nums):
-            if zero_cnt: res[i] = 0 if c else prod
-            else: res[i] = prod // c
+        pref[0] = 1
+        suff[n-1] = 1
+
+        for i in range(1,n):
+            pref[i] = pref[i-1] * nums[i-1]
+        for i in range(n-2, -1, -1):
+            suff[i] = suff[i+1] * nums[i+1]
+        for i in range(n):
+            res[i] = suff[i] * pref[i]
+
         return res
